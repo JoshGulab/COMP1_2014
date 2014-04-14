@@ -1,3 +1,4 @@
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -80,6 +81,8 @@ def DisplayMenu():
 def GetMenuChoice():
   Choice = input()
   print()
+  if Choice in ["Q","q","quit","Quit"]:
+    Choice = "p"
   return Choice
 
 def LoadDeck(Deck):
@@ -137,11 +140,10 @@ def GetPlayerName():
 
 def GetChoiceFromUser():
   Choice = input('Do you think the next card will be higher than the last card (enter y or n)? ')
-  if Choice == ("yes","Y","Yes","y"):
-    print()
-  elif Choice == ("no","No","N","n"):
-    print()
-    
+  if Choice in ['yes', 'Yes', 'Y', 'y']:
+    Choice = 'y'
+  elif Choice in ['no', 'No', 'N', 'n']:
+    Choice = 'n'
   return Choice
 
 def DisplayEndOfGameMessage(Score):
@@ -151,6 +153,9 @@ def DisplayEndOfGameMessage(Score):
   if Score == 51:
     print('WOW! You completed a perfect game.')
   print()
+  AddToHighScores = input("Do you want to add your score to the high score table (y or n)?")
+  return AddToHighScores
+    
 
 def DisplayCorrectGuessMessage(Score):
   print()
@@ -174,23 +179,25 @@ def DisplayRecentScores(RecentScores):
   input()
   print()
 
-def UpdateRecentScores(RecentScores, Score):
-  PlayerName = GetPlayerName()
-  FoundSpace = False
-  Count = 1
-  while (not FoundSpace) and (Count <= NO_OF_RECENT_SCORES):
-    if RecentScores[Count].Name == '':
-      FoundSpace = True
-    else:
-      Count = Count + 1
-  if not FoundSpace:
-    for Count in range(1, NO_OF_RECENT_SCORES):
-      RecentScores[Count].Name = RecentScores[Count + 1].Name
-      RecentScores[Count].Score = RecentScores[Count + 1].Score
-    Count = NO_OF_RECENT_SCORES
-  RecentScores[Count].Name = PlayerName
-  RecentScores[Count].Score = Score
-
+def UpdateRecentScores(RecentScores, Score, AddToHighScores):
+  if AddToHighScores in ['yes', 'Yes', 'Y', 'y']:
+    PlayerName = GetPlayerName()
+    FoundSpace = False
+    Count = 1
+    while (not FoundSpace) and (Count <= NO_OF_RECENT_SCORES):
+      if RecentScores[Count].Name == '':
+        FoundSpace = True
+      else:
+        Count = Count + 1
+    if not FoundSpace:
+      for Count in range(1, NO_OF_RECENT_SCORES):
+        RecentScores[Count].Name = RecentScores[Count + 1].Name
+        RecentScores[Count].Score = RecentScores[Count + 1].Score
+      Count = NO_OF_RECENT_SCORES
+    RecentScores[Count].Name = PlayerName
+    RecentScores[Count].Score = Score
+  else:
+    pass
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
   NextCard = TCard()
@@ -214,10 +221,10 @@ def PlayGame(Deck, RecentScores):
       GameOver = True
   if GameOver:
     DisplayEndOfGameMessage(NoOfCardsTurnedOver - 2)
-    UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2)
+    UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2, AddToHighScores)
   else:
     DisplayEndOfGameMessage(51)
-    UpdateRecentScores(RecentScores, 51)
+    UpdateRecentScores(RecentScores, 51, AddToHighScores)
 
 if __name__ == '__main__':
   for Count in range(1, 53):
