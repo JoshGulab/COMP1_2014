@@ -81,8 +81,8 @@ def DisplayMenu():
 def GetMenuChoice():
   Choice = input()
   print()
-  if Choice in ["Q","q","quit","Quit"]:
-    Choice = "p"
+  if Choice in ["Q","Quit","q","quit"]:
+    Choice = "q"
   return Choice
 
 def LoadDeck(Deck):
@@ -134,17 +134,22 @@ def IsNextCardHigher(LastCard, NextCard):
 def GetPlayerName():
   print()
   PlayerName = input('Please enter your name: ')
+  if len(PlayerName) >10:
+    print("Your name can only be 10 characters long.")
+    GetPlayerName()
   print()
   return PlayerName
 
 
+
 def GetChoiceFromUser():
   Choice = input('Do you think the next card will be higher than the last card (enter y or n)? ')
-  if Choice in ['yes', 'Yes', 'Y', 'y']:
-    Choice = 'y'
-  elif Choice in ['no', 'No', 'N', 'n']:
-    Choice = 'n'
+  if Choice in ["yes","Y","Yes","y"]:
+    Choice = "y"
+  elif Choice in ["no","No","N","n"]:
+    Choice = "n"
   return Choice
+
 
 def DisplayEndOfGameMessage(Score):
   print()
@@ -153,9 +158,6 @@ def DisplayEndOfGameMessage(Score):
   if Score == 51:
     print('WOW! You completed a perfect game.')
   print()
-  AddToHighScores = input("Do you want to add your score to the high score table (y or n)?")
-  return AddToHighScores
-    
 
 def DisplayCorrectGuessMessage(Score):
   print()
@@ -172,32 +174,38 @@ def DisplayRecentScores(RecentScores):
   print()
   print('Recent Scores: ')
   print()
+  print("{0:<10}{1:<3}".format("Name", "Score"))
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
-    print(RecentScores[Count].Name, 'got a score of', RecentScores[Count].Score)
+    print("{0:<10}{1:<3}".format(RecentScores[Count].Name, RecentScores[Count].Score)) 
   print()
   print('Press the Enter key to return to the main menu')
   input()
   print()
 
-def UpdateRecentScores(RecentScores, Score, AddToHighScores):
-  if AddToHighScores in ['yes', 'Yes', 'Y', 'y']:
+def UpdateRecentScores(RecentScores, Score):
+  valid = False
+  while not valid:
     PlayerName = GetPlayerName()
-    FoundSpace = False
-    Count = 1
-    while (not FoundSpace) and (Count <= NO_OF_RECENT_SCORES):
-      if RecentScores[Count].Name == '':
-        FoundSpace = True
-      else:
-        Count = Count + 1
+    if PlayerName == "":
+      print("You must enter something for your name!")
+      valid = False
+    else:
+      FoundSpace = False
+      Count = 1
+      while (not FoundSpace) and (Count <= NO_OF_RECENT_SCORES):
+        if RecentScores[Count].Name == '':
+          FoundSpace = True
+        else:
+          Count = Count + 1
     if not FoundSpace:
       for Count in range(1, NO_OF_RECENT_SCORES):
-        RecentScores[Count].Name = RecentScores[Count + 1].Name
-        RecentScores[Count].Score = RecentScores[Count + 1].Score
+          RecentScores[Count].Name = RecentScores[Count + 1].Name
+          RecentScores[Count].Score = RecentScores[Count + 1].Score
       Count = NO_OF_RECENT_SCORES
     RecentScores[Count].Name = PlayerName
     RecentScores[Count].Score = Score
-  else:
-    pass
+    valid = True
+
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
   NextCard = TCard()
@@ -221,10 +229,12 @@ def PlayGame(Deck, RecentScores):
       GameOver = True
   if GameOver:
     DisplayEndOfGameMessage(NoOfCardsTurnedOver - 2)
-    UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2, AddToHighScores)
+    updateScore = input("Do you want to add your score to the high score table (y or n)?")
+    if updateScore in ["yes","Y","Yes","y"]: 
+      UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2)
   else:
-    DisplayEndOfGameMessage(51)
-    UpdateRecentScores(RecentScores, 51, AddToHighScores)
+      DisplayEndOfGameMessage(51)
+      UpdateRecentScores(RecentScores, 51)
 
 if __name__ == '__main__':
   for Count in range(1, 53):
