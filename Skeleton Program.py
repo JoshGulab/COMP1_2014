@@ -1,4 +1,5 @@
 
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -78,6 +79,7 @@ def DisplayMenu():
   print('2. Play game (without shuffle)')
   print('3. Display recent scores')
   print('4. Reset recent scores')
+  print('5. Options')
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -118,6 +120,41 @@ def DisplayCard(ThisCard):
   print()
   print('Card is the', GetRank(ThisCard.Rank), 'of', GetSuit(ThisCard.Suit))
   print()
+
+def DisplayOptions():
+  print("OPTIONS MENU")
+  print()
+  print("1. Set Ace to be HIGH or LOW")
+  print()
+  print()
+
+def GetOptionChoice():
+  OptionChoice = input("Select a option from the menu (or enter q to quit): ")
+  return OptionChoice
+
+def SetOptions(OptionChoice):
+  if OptionChoice == '1':
+    SetAceHighOrLow()
+  else:
+    pass
+
+def SetAceHighOrLow():
+  HighOrLow = input("Do you want Ace to be (h)igh or (l)ow: ")
+  if HighToLow in ['high', 'HIGH', 'H', 'h']:
+    print()
+
+  elif HighToLow in ['low', 'LOW', 'l', 'L']:
+    print()
+
+  else:
+    pass
+    
+    
+
+
+
+  
+  
 
 def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   ThisCard.Rank = Deck[1].Rank
@@ -266,3 +303,7 @@ if __name__ == '__main__':
       DisplayRecentScores(RecentScores)
     elif Choice == '4':
       ResetRecentScores(RecentScores)
+    elif Choice == '5':
+      DisplayOptions()
+      OptionChoice = GetOptionChoice()
+      SetOptions(OptionChoice)
