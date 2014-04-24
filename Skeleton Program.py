@@ -1,5 +1,6 @@
 
 
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -129,8 +130,11 @@ def DisplayOptions():
   print()
 
 def GetOptionChoice():
-  OptionChoice = input("Select a option from the menu (or enter q to quit): ")
-  return OptionChoice
+  OptionChoice = input("Select a option from the menu (or 'q' to quit): ")
+  if OptionChoice not in ['1']:
+    print("That is not a valid choice!")
+    GetOptionChoice()
+    return OptionChoice
 
 def SetOptions(OptionChoice):
   if OptionChoice == '1':
@@ -140,14 +144,15 @@ def SetOptions(OptionChoice):
 
 def SetAceHighOrLow():
   HighOrLow = input("Do you want Ace to be (h)igh or (l)ow: ")
-  if HighToLow in ['high', 'HIGH', 'H', 'h']:
+  if HighOrLow in ['high', 'HIGH', 'H', 'h']:
     print()
-
-  elif HighToLow in ['low', 'LOW', 'l', 'L']:
+    
+  elif HighOrLow in ['low', 'LOW', 'l', 'L']:
     print()
-
   else:
     pass
+  
+  return AceHighOrLow
     
     
 
@@ -165,10 +170,16 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Suit = 0
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
-def IsNextCardHigher(LastCard, NextCard):
+def IsNextCardHigher(LastCard, NextCard, AceHighOrLow):
   Higher = False
   if NextCard.Rank > LastCard.Rank:
     Higher = True
+  elif NextCard.Rank == LastCard.Rank:
+    if AceHighOrLow == 'high':
+      Higher = True
+    if AceHighOrLow == 'low':
+      Higher = False
+    
   return Higher
 
 def GetPlayerName():
@@ -217,7 +228,7 @@ def DisplayRecentScores(RecentScores):
   print()
   print("{0:<10}{1:<10}{2:<10}".format("Name", "Score", "Date"))
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
-    print("{0:<10}{1:<10}{2:<30}".format(RecentScores[Count].Name, RecentScores[Count].Score, RecentScores[Count].date))
+    print("{0:<10}{1:<10}{2:<10}".format(RecentScores[Count].Name, RecentScores[Count].Score, RecentScores[Count].date))
     
   print()
   print('Press the Enter key to return to the main menu')
@@ -267,7 +278,7 @@ def PlayGame(Deck, RecentScores):
       Choice = GetChoiceFromUser()
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
-    Higher = IsNextCardHigher(LastCard, NextCard)
+    Higher = IsNextCardHigher(LastCard, NextCard, AceHighOrLow)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
       DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
       LastCard.Rank = NextCard.Rank
