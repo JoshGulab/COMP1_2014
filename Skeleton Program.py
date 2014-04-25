@@ -1,6 +1,7 @@
 
 
 
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -29,10 +30,11 @@ class TRecentScore():
 Deck = [None]
 RecentScores = [None]
 Choice = ''
+AceHighOrLow = False
 
 def GetRank(RankNo):
   Rank = ''
-  if RankNo == 1:
+  if RankNo == 1 or RankNo == 14:
     Rank = 'Ace'
   elif RankNo == 2:
     Rank = 'Two'
@@ -92,6 +94,7 @@ def GetMenuChoice():
   return Choice
 
 def LoadDeck(Deck):
+  global AceHighOrLow
   CurrentFile = open('deck.txt', 'r')
   Count = 1
   while True:
@@ -102,7 +105,11 @@ def LoadDeck(Deck):
     Deck[Count].Suit = int(LineFromFile)
     LineFromFile = CurrentFile.readline()
     Deck[Count].Rank = int(LineFromFile)
+    if AceHighOrLow == True and Deck[Count].Rank == 1:
+      Deck[Count].Rank = 14
     Count = Count + 1
+
+  
  
 def ShuffleDeck(Deck):
   SwapSpace = TCard()
@@ -130,11 +137,15 @@ def DisplayOptions():
   print()
 
 def GetOptionChoice():
-  OptionChoice = input("Select a option from the menu (or 'q' to quit): ")
-  if OptionChoice not in ['1']:
-    print("That is not a valid choice!")
-    GetOptionChoice()
-    return OptionChoice
+  validChoice = False
+  while not validChoice:
+    OptionChoice = input("Select a option from the menu (or 'q' to quit): ")
+    if OptionChoice in ['1','q']:
+      return OptionChoice
+      validChoice = True
+    else:
+      print("That was not a avalid choice")
+      
 
 def SetOptions(OptionChoice):
   if OptionChoice == '1':
@@ -143,24 +154,18 @@ def SetOptions(OptionChoice):
     pass
 
 def SetAceHighOrLow():
-  HighOrLow = input("Do you want Ace to be (h)igh or (l)ow: ")
-  if HighOrLow in ['high', 'HIGH', 'H', 'h']:
-    print()
-    
-  elif HighOrLow in ['low', 'LOW', 'l', 'L']:
-    print()
+  global AceHighOrLow
+  AceHighOrLow = input("Do you want Ace to be (h)igh or (l)ow: ")
+  if AceHighOrLow in ['high', 'HIGH', 'H', 'h']:
+    AceHighOrLow = True
+  elif AceHighOrLow in ['low', 'LOW', 'l', 'L']:
+    AceHighOrLow = False
   else:
     pass
-  
-  return AceHighOrLow
+
+
     
     
-
-
-
-  
-  
-
 def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   ThisCard.Rank = Deck[1].Rank
   ThisCard.Suit = Deck[1].Suit
@@ -170,16 +175,10 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Suit = 0
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
-def IsNextCardHigher(LastCard, NextCard, AceHighOrLow):
+def IsNextCardHigher(LastCard, NextCard):
   Higher = False
   if NextCard.Rank > LastCard.Rank:
     Higher = True
-  elif NextCard.Rank == LastCard.Rank:
-    if AceHighOrLow == 'high':
-      Higher = True
-    if AceHighOrLow == 'low':
-      Higher = False
-    
   return Higher
 
 def GetPlayerName():
@@ -278,7 +277,7 @@ def PlayGame(Deck, RecentScores):
       Choice = GetChoiceFromUser()
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
-    Higher = IsNextCardHigher(LastCard, NextCard, AceHighOrLow)
+    Higher = IsNextCardHigher(LastCard, NextCard)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
       DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
       LastCard.Rank = NextCard.Rank
