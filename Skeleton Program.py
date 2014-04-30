@@ -84,6 +84,7 @@ def DisplayMenu():
   print('3. Display recent scores')
   print('4. Reset recent scores')
   print('5. Options')
+  print('6. Save Scores')
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -260,22 +261,33 @@ def UpdateRecentScores(RecentScores, Score, date):
     RecentScores[Count].Name = PlayerName
     RecentScores[Count].Score = Score
     RecentScores[Count].date = ("{0}/{1}/{2}".format(date.day, date.month, date.year))
-
-    
     valid = True
+    
 
-def bubblesort(RecentScores):
-  count = 1
-  while len(RecentScores):
-    if RecentScores[count].Score < RecentScores[count + 1].Score:
-      temp = RecentScores[count].Score
-      RecentScores[count].Score = RecentScores[count + 1].Score
-      RecentScores[count + 1].Score = temp
-      
-      
-      
-      
+def BubbleSortScores(RecentScores):
   
+  ListLength = len(RecentScores)
+  SwapMade = True
+  while SwapMade:
+    SwapMade = False
+    Count = 1
+    ScoresLength = len(RecentScores)
+    for Count in range (1,ScoresLength - 1):
+      if RecentScores[Count].Score < RecentScores[Count + 1].Score:
+        temp = RecentScores[Count + 1]
+        RecentScores[Count + 1] = RecentScores[Count]
+        RecentScores[Count] = temp
+        SwapMade = True
+
+def SaveScores(RecentScores):
+  with open ('save_scores.txt', mode ='w', encoding = 'utf-8')as myfile:
+    Count = 1
+    for Count in range (len(RecentScores)):
+      RecentScores[Count].Score = int
+      RecentScores[Count].date = int
+      myfile.write(RecentScores[Count].Name)
+      myfile.write(RecentScores[Count].Score)
+      myfile.write(RecentScores[Count].date)
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
@@ -303,9 +315,12 @@ def PlayGame(Deck, RecentScores):
     updateScore = input("Do you want to add your score to the high score table (y or n)?")
     if updateScore in ["yes","Y","Yes","y"]: 
       UpdateRecentScores(RecentScores, NoOfCardsTurnedOver - 2, date)
+      BubbleSortScores(RecentScores)
   else:
       DisplayEndOfGameMessage(51)
       UpdateRecentScores(RecentScores, 51, date)
+      BubbleSortScores(RecentScores)
+      
 
 if __name__ == '__main__':
   for Count in range(1, 53):
@@ -331,3 +346,5 @@ if __name__ == '__main__':
       DisplayOptions()
       OptionChoice = GetOptionChoice()
       SetOptions(OptionChoice)
+    elif Choice == '6':
+      SaveScores(RecentScores)
