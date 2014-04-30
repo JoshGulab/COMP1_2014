@@ -3,32 +3,24 @@
 
 
 
-
-
-
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
 # developed in the Python 3.2 programming environment
 # version 2 edited 06/03/2014
 
-
 ######test change#############
-
 
 import random
 import datetime
 date = datetime.datetime.now()
 
-
 NO_OF_RECENT_SCORES = 3
-
 
 class TCard():
   def __init__(self):
     self.Suit = 0
     self.Rank = 0
-
 
 class TRecentScore():
   def __init__(self):
@@ -36,12 +28,10 @@ class TRecentScore():
     self.Score = 0
     self.date = ''
 
-
 Deck = [None]
 RecentScores = [None]
 Choice = ''
 AceHighOrLow = False
-
 
 def GetRank(RankNo):
   Rank = ''
@@ -73,7 +63,6 @@ def GetRank(RankNo):
     Rank = 'King'
   return Rank
 
-
 def GetSuit(SuitNo):
   Suit = ''
   if SuitNo == 1:
@@ -85,7 +74,6 @@ def GetSuit(SuitNo):
   elif SuitNo == 4:
     Suit = 'Spades'
   return Suit
-
 
 def DisplayMenu():
   print()
@@ -99,14 +87,12 @@ def DisplayMenu():
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
-
 def GetMenuChoice():
   Choice = input()
   print()
   if Choice in ["Q","Quit","q","quit"]:
     Choice = "q"
   return Choice
-
 
 def LoadDeck(Deck):
   global AceHighOrLow
@@ -124,7 +110,6 @@ def LoadDeck(Deck):
       Deck[Count].Rank = 14
     Count = Count + 1
 
-
   
  
 def ShuffleDeck(Deck):
@@ -140,12 +125,10 @@ def ShuffleDeck(Deck):
     Deck[Position2].Rank = SwapSpace.Rank
     Deck[Position2].Suit = SwapSpace.Suit
 
-
 def DisplayCard(ThisCard):
   print()
   print('Card is the', GetRank(ThisCard.Rank), 'of', GetSuit(ThisCard.Suit))
   print()
-
 
 def DisplayOptions():
   print("OPTIONS MENU")
@@ -153,7 +136,6 @@ def DisplayOptions():
   print("1. Set Ace to be HIGH or LOW")
   print()
   print()
-
 
 def GetOptionChoice():
   validChoice = False
@@ -166,13 +148,11 @@ def GetOptionChoice():
       print("That was not a avalid choice")
       
 
-
 def SetOptions(OptionChoice):
   if OptionChoice == '1':
     SetAceHighOrLow()
   else:
     pass
-
 
 def SetAceHighOrLow():
   global AceHighOrLow
@@ -183,8 +163,6 @@ def SetAceHighOrLow():
     AceHighOrLow = False
   else:
     pass
-
-
 
 
     
@@ -198,13 +176,11 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Suit = 0
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
-
 def IsNextCardHigher(LastCard, NextCard):
   Higher = False
   if NextCard.Rank > LastCard.Rank:
     Higher = True
   return Higher
-
 
 def GetPlayerName():
   print()
@@ -217,9 +193,6 @@ def GetPlayerName():
 
 
 
-
-
-
 def GetChoiceFromUser():
   Choice = input('Do you think the next card will be higher than the last card (enter y or n)? ')
   if Choice in ["yes","Y","Yes","y"]:
@@ -227,8 +200,6 @@ def GetChoiceFromUser():
   elif Choice in ["no","No","N","n"]:
     Choice = "n"
   return Choice
-
-
 
 
 def DisplayEndOfGameMessage(Score):
@@ -239,20 +210,17 @@ def DisplayEndOfGameMessage(Score):
     print('WOW! You completed a perfect game.')
   print()
 
-
 def DisplayCorrectGuessMessage(Score):
   print()
   print('Well done! You guessed correctly.')
   print('Your score is now ', Score, '.', sep='')
   print()
 
-
 def ResetRecentScores(RecentScores):
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores[Count].Name = ''
     RecentScores[Count].Score = 0
     RecentScores[Count].date = ''
-
 
 def DisplayRecentScores(RecentScores):
   print()
@@ -266,7 +234,6 @@ def DisplayRecentScores(RecentScores):
   print('Press the Enter key to return to the main menu')
   input()
   print()
-
 
 def UpdateRecentScores(RecentScores, Score, date):
   valid = False
@@ -294,10 +261,21 @@ def UpdateRecentScores(RecentScores, Score, date):
     RecentScores[Count].Score = Score
     RecentScores[Count].date = ("{0}/{1}/{2}".format(date.day, date.month, date.year))
 
-
     
     valid = True
 
+def bubblesort(RecentScores):
+  count = 1
+  while len(RecentScores):
+    if RecentScores[count].Score < RecentScores[count + 1].Score:
+      temp = RecentScores[count].Score
+      RecentScores[count].Score = RecentScores[count + 1].Score
+      RecentScores[count + 1].Score = temp
+      
+      
+      
+      
+  
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
@@ -328,7 +306,6 @@ def PlayGame(Deck, RecentScores):
   else:
       DisplayEndOfGameMessage(51)
       UpdateRecentScores(RecentScores, 51, date)
-
 
 if __name__ == '__main__':
   for Count in range(1, 53):
