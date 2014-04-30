@@ -284,11 +284,14 @@ def SaveScores(RecentScores):
       myfile.write(str(RecentScores[Count].Score))
       myfile.write(str(RecentScores[Count].date))
   print("Your Scores were successfuly saved.")
-    
-##    for Count in range (len(RecentScores)):
-##      myfile.write(RecentScores[Count].Name)
-##      myfile.write(RecentScores[Count].Score)
-##      myfile.write(RecentScores[Count].date)
+  #only saves the scores if there are three entered
+  # '\n' does not work an error appears
+
+def LoadScores():
+  with open('save_scores.txt', mode ='r', encoding = 'utf-8')as myfile:
+    for line in myfile:
+      print()
+      
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
