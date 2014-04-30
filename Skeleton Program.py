@@ -265,8 +265,6 @@ def UpdateRecentScores(RecentScores, Score, date):
     
 
 def BubbleSortScores(RecentScores):
-  
-  ListLength = len(RecentScores)
   SwapMade = True
   while SwapMade:
     SwapMade = False
@@ -281,13 +279,16 @@ def BubbleSortScores(RecentScores):
 
 def SaveScores(RecentScores):
   with open ('save_scores.txt', mode ='w', encoding = 'utf-8')as myfile:
-    Count = 1
-    for Count in range (len(RecentScores)):
-      RecentScores[Count].Score = int
-      RecentScores[Count].date = int
+    for count in range (len(RecentScores)):
       myfile.write(RecentScores[Count].Name)
-      myfile.write(RecentScores[Count].Score)
-      myfile.write(RecentScores[Count].date)
+      myfile.write(str(RecentScores[Count].Score))
+      myfile.write(str(RecentScores[Count].date))
+  print("Your Scores were successfuly saved.")
+    
+##    for Count in range (len(RecentScores)):
+##      myfile.write(RecentScores[Count].Name)
+##      myfile.write(RecentScores[Count].Score)
+##      myfile.write(RecentScores[Count].date)
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
