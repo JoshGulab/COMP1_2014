@@ -279,18 +279,31 @@ def BubbleSortScores(RecentScores):
 
 def SaveScores(RecentScores):
   with open ('save_scores.txt', mode ='w', encoding = 'utf-8')as myfile:
-    for count in range (len(RecentScores)):
-      myfile.write(RecentScores[Count].Name)
-      myfile.write(str(RecentScores[Count].Score))
-      myfile.write(str(RecentScores[Count].date))
+    for Count in range (1,len(RecentScores)):
+      myfile.write((RecentScores[Count].Name) + '\n')
+      myfile.write(str(RecentScores[Count].Score) + '\n')
+      myfile.write(str(RecentScores[Count].date) + '\n')
   print("Your Scores were successfuly saved.")
-  #only saves the scores if there are three entered
-  # '\n' does not work an error appears
+  LoadScores(RecentScores)
 
-def LoadScores():
+
+def LoadScores(RecentScores):
   with open('save_scores.txt', mode ='r', encoding = 'utf-8')as myfile:
-    for line in myfile:
-      print()
+    for line in range(1,3):
+      for count in range(1,3):
+        RecentScores[line].Name = count
+        RecentScores[line].Score = count + 1
+        RecentScores[line].date = count + 2
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
 
 def PlayGame(Deck, RecentScores):
