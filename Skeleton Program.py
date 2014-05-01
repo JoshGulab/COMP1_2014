@@ -289,23 +289,17 @@ def SaveScores(RecentScores):
 
 def LoadScores(RecentScores):
   with open('save_scores.txt', mode ='r', encoding = 'utf-8')as myfile:
-    for line in range(1,3):
-      for count in range(1,3):
-        RecentScores[line].Name = count
-        RecentScores[line].Score = count + 1
-        RecentScores[line].date = count + 2
+    for count in range(1,len(RecentScores)):
+      for line in myfile:
+        RecentScores[count].Name = line
+        print(RecentScores[count].Name)
+        RecentScores[count].Score = line + 1
+        RecentScores[count].date = line + 2
+        line = line + 3
 
       
       
       
-      
-      
-      
-      
-      
-      
-      
-
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
   NextCard = TCard()
