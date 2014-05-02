@@ -85,6 +85,8 @@ def DisplayMenu():
   print('4. Reset recent scores')
   print('5. Options')
   print('6. Save Scores')
+  
+  print('7. Load Recent Scores')
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -288,18 +290,17 @@ def SaveScores(RecentScores):
 
 
 def LoadScores(RecentScores):
+  RecentScores = ['']
   with open('save_scores.txt', mode ='r', encoding = 'utf-8')as myfile:
-    for count in range(1,len(RecentScores)):
-      for line in myfile:
-        RecentScores[count].Name = line
-        print(RecentScores[count].Name)
-        RecentScores[count].Score = line + 1
-        RecentScores[count].date = line + 2
-        line = line + 3
+    for count in range(1, NO_OF_RECENT_SCORES + 1):
+        scores =  TRecentScore
+        scores.Name = myfile.readline().rstrip( '\n')
+        scores.Score = myfile.readline().rstrip( '\n')
+        scores.date = myfile.readline().rstrip( '\n')
+        RecentScores.append(scores)
+  return RecentScores
+  
 
-      
-      
-      
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
   NextCard = TCard()
@@ -335,7 +336,8 @@ def PlayGame(Deck, RecentScores):
 
 if __name__ == '__main__':
   for Count in range(1, 53):
-    Deck.append(TCard())
+    Deck.append(TCard()
+                )
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores.append(TRecentScore())
   Choice = ''
@@ -359,3 +361,6 @@ if __name__ == '__main__':
       SetOptions(OptionChoice)
     elif Choice == '6':
       SaveScores(RecentScores)
+    elif Choice == '7':
+      RecentScores = LoadScores(RecentScores)
+      print("your Recent Scores have been loaded")
