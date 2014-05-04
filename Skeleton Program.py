@@ -112,8 +112,19 @@ def LoadDeck(Deck):
       Deck[Count].Rank = 14
     Count = Count + 1
 
+def SaveDeck(Deck):
+  with open('SaveCurrentDeck.txt', mode ='w', encoding = 'utf-8')as myfile:
+    for line in Deck:
+      myfile.write(str(line))
+def SaveCurrentScore(Score):
+  with open ('SaveCurrentScore.txt', mode ='w', encoding = 'utf-8')as myfile:
+      myfile.write(str(Score))
+def SaveCardsTurnedOver(NoOfCardsTurnedOver):
+  with open ('SaveCardsTurnedOver.txt', mode ='w', encoding = 'utf-8')as myfile:
+      myfile.write(str(NoOfCardsTurnedOver))
   
- 
+
+
 def ShuffleDeck(Deck):
   SwapSpace = TCard()
   NoOfSwaps = 1000
@@ -147,7 +158,7 @@ def GetOptionChoice():
       return OptionChoice
       validChoice = True
     else:
-      print("That was not a avalid choice")
+      print("That was not a a valid choice")
       
 
 def SetOptions(OptionChoice):
@@ -222,6 +233,13 @@ def GetChoiceFromUser():
     Choice = "y"
   elif Choice in ["no","No","N","n"]:
     Choice = "n"
+  elif Choice in ['s','S','save','Save']:
+    SaveDeck(Deck)
+    SaveCurrentScore(Score)
+    SaveCardsTurnedOver(NoOfCardsTurnedOver)
+    print("Your Progress has been saved.")
+    main()
+    
   return Choice
 
 
