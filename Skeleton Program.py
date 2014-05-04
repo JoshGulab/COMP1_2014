@@ -15,7 +15,7 @@ import random
 import datetime
 date = datetime.datetime.now()
 
-NO_OF_RECENT_SCORES = 3
+NO_OF_RECENT_SCORES = 10
 
 class TCard():
   def __init__(self):
@@ -85,8 +85,6 @@ def DisplayMenu():
   print('4. Reset recent scores')
   print('5. Options')
   print('6. Save Scores')
-  
-  print('7. Load Recent Scores')
   print()
   print('Select an option from the menu (or enter q to quit): ', end='')
 
@@ -205,6 +203,7 @@ def GetChoiceFromUser():
   return Choice
 
 
+
 def DisplayEndOfGameMessage(Score):
   print()
   print('GAME OVER!')
@@ -273,7 +272,7 @@ def BubbleSortScores(RecentScores):
     Count = 1
     ScoresLength = len(RecentScores)
     for Count in range (1,ScoresLength - 1):
-      if RecentScores[Count].Score < RecentScores[Count + 1].Score:
+      if str(RecentScores[Count].Score) < str(RecentScores[Count + 1].Score):
         temp = RecentScores[Count + 1]
         RecentScores[Count + 1] = RecentScores[Count]
         RecentScores[Count] = temp
@@ -293,7 +292,7 @@ def LoadScores(RecentScores):
   RecentScores = ['']
   with open('save_scores.txt', mode ='r', encoding = 'utf-8')as myfile:
     for count in range(1, NO_OF_RECENT_SCORES + 1):
-        scores =  TRecentScore
+        scores =  TRecentScore()
         scores.Name = myfile.readline().rstrip( '\n')
         scores.Score = myfile.readline().rstrip( '\n')
         scores.date = myfile.readline().rstrip( '\n')
@@ -336,10 +335,14 @@ def PlayGame(Deck, RecentScores):
 
 if __name__ == '__main__':
   for Count in range(1, 53):
-    Deck.append(TCard()
-                )
+    Deck.append(TCard())
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores.append(TRecentScore())
+  try:
+    RecentScores = LoadScores(RecentScores)
+    print("Your Recent Scores have been loaded")
+  except IOError:
+    print("There are no Recent Scores to be loaded.")
   Choice = ''
   while Choice != 'q':
     DisplayMenu()
@@ -361,6 +364,4 @@ if __name__ == '__main__':
       SetOptions(OptionChoice)
     elif Choice == '6':
       SaveScores(RecentScores)
-    elif Choice == '7':
-      RecentScores = LoadScores(RecentScores)
-      print("your Recent Scores have been loaded")
+  
