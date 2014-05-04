@@ -32,6 +32,7 @@ Deck = [None]
 RecentScores = [None]
 Choice = ''
 AceHighOrLow = False
+SameScore = ''
 
 def GetRank(RankNo):
   Rank = ''
@@ -135,14 +136,14 @@ def DisplayOptions():
   print("OPTIONS MENU")
   print()
   print("1. Set Ace to be HIGH or LOW")
-  print()
+  print("2. Card of same Score ends game.")
   print()
 
 def GetOptionChoice():
   validChoice = False
   while not validChoice:
     OptionChoice = input("Select a option from the menu (or 'q' to quit): ")
-    if OptionChoice in ['1','q']:
+    if OptionChoice in ['1','2','q']:
       return OptionChoice
       validChoice = True
     else:
@@ -152,6 +153,8 @@ def GetOptionChoice():
 def SetOptions(OptionChoice):
   if OptionChoice == '1':
     SetAceHighOrLow()
+  elif OptionChoice == '2':
+    SetSameScore()
   else:
     pass
 
@@ -162,6 +165,18 @@ def SetAceHighOrLow():
     AceHighOrLow = True
   elif AceHighOrLow in ['low', 'LOW', 'l', 'L']:
     AceHighOrLow = False
+  else:
+    pass
+
+def SetSameScore():
+  global SameScore
+  SameScore = input("Do you want cards with the same value as previous to end game? (y/n): ")
+  if SameScore in ['yes','Yes','YES','y','Y']:
+    SameScore = 'y'
+    print("You changes have been made.")
+  elif SameScore in ['no','No','NO','n','N']:
+    SameScore = 'n'
+    print("You changes have been made.")
   else:
     pass
 
@@ -178,7 +193,14 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
 def IsNextCardHigher(LastCard, NextCard):
+  global SameScore
   Higher = False
+  if NextCard.Rank == LastCard.Rank:
+    if SameScore == 'y':
+      Higher = False
+    if SameScore == 'n':
+      Higher = True
+      
   if NextCard.Rank > LastCard.Rank:
     Higher = True
   return Higher
@@ -261,6 +283,7 @@ def UpdateRecentScores(RecentScores, Score, date):
       Count = NO_OF_RECENT_SCORES
     RecentScores[Count].Name = PlayerName
     RecentScores[Count].Score = Score
+    
     RecentScores[Count].date = ("{0}/{1}/{2}".format(date.day, date.month, date.year))
     valid = True
     
