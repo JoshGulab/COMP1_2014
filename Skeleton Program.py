@@ -204,14 +204,7 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
 def IsNextCardHigher(LastCard, NextCard):
-  global SameScore
   Higher = False
-  if NextCard.Rank == LastCard.Rank:
-    if SameScore == 'y':
-      Higher = False
-    if SameScore == 'n':
-      Higher = True
-      
   if NextCard.Rank > LastCard.Rank:
     Higher = True
   return Higher
@@ -342,6 +335,7 @@ def LoadScores(RecentScores):
   
 
 def PlayGame(Deck, RecentScores):
+  global SameScore
   LastCard = TCard()
   NextCard = TCard()
   GameOver = False
@@ -355,6 +349,8 @@ def PlayGame(Deck, RecentScores):
       Choice = GetChoiceFromUser()
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
+    if SameScore == 'y' and NextCard.Rank == LastCard.Rank:
+      GameOver = True
     Higher = IsNextCardHigher(LastCard, NextCard)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
       DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
