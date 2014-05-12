@@ -203,9 +203,11 @@ def GetCard(ThisCard, Deck, NoOfCardsTurnedOver):
   Deck[52 - NoOfCardsTurnedOver].Suit = 0
   Deck[52 - NoOfCardsTurnedOver].Rank = 0
 
-def IsNextCardHigher(LastCard, NextCard):
+def IsNextCardHigher(LastCard, NextCard, SameScore):
   Higher = False
-  if NextCard.Rank > LastCard.Rank:
+  if SameScore == 'n' and NextCard.Rank == LastCard.Rank and Choice == 'y' or 'n':
+    Higher = True
+  elif NextCard.Rank > LastCard.Rank:
     Higher = True
   return Higher
 
@@ -349,13 +351,14 @@ def PlayGame(Deck, RecentScores):
       Choice = GetChoiceFromUser()
     DisplayCard(NextCard)
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
-    if SameScore == 'y' and NextCard.Rank == LastCard.Rank:
-      GameOver = True
-    Higher = IsNextCardHigher(LastCard, NextCard)
+    Higher = IsNextCardHigher(LastCard, NextCard, SameScore)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
-      DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
-      LastCard.Rank = NextCard.Rank
-      LastCard.Suit = NextCard.Suit
+      if SameScore == 'y' and NextCard.Rank == LastCard.Rank:
+        GameOver = True
+      else:
+        DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
+        LastCard.Rank = NextCard.Rank
+        LastCard.Suit = NextCard.Suit
     else:
       GameOver = True
   if GameOver:
