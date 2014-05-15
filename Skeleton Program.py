@@ -3,6 +3,7 @@
 
 
 
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -183,10 +184,10 @@ def SetSameScore():
   global SameScore
   SameScore = input("Do you want cards with the same value as previous to end game? (y/n): ")
   if SameScore in ['yes','Yes','YES','y','Y']:
-    SameScore = 'y'
+    SameScore = True
     print("You changes have been made.")
   elif SameScore in ['no','No','NO','n','N']:
-    SameScore = 'n'
+    SameScore = False
     print("You changes have been made.")
   else:
     pass
@@ -351,8 +352,11 @@ def PlayGame(Deck, RecentScores):
     NoOfCardsTurnedOver = NoOfCardsTurnedOver + 1
     Higher = IsNextCardHigher(LastCard, NextCard, SameScore)
     if (Higher and Choice == 'y') or (not Higher and Choice == 'n'):
-      if SameScore == 'n' and NextCard.Rank == LastCard.Rank:
+      if SameScore == True and NextCard.Rank == LastCard.Rank:
         print("The card is the same as previous")
+        LastCard.Rank = NextCard.Rank
+        LastCard.Suit = NextCard.Suit
+        GameOver = True
       else:
         DisplayCorrectGuessMessage(NoOfCardsTurnedOver - 1)
         LastCard.Rank = NextCard.Rank
