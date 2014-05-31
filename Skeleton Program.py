@@ -4,6 +4,7 @@
 
 
 
+
 # Skeleton Program code for the AQA COMP1 Summer 2014 examination
 # this code should be used in conjunction with the Preliminary Material
 # written by the AQA Programmer Team
@@ -99,7 +100,11 @@ def GetMenuChoice():
 
 def LoadDeck(Deck):
   global AceHighOrLow
-  CurrentFile = open('deck.txt', 'r')
+  try:
+    CurrentFile = open('SaveDeck.txt', 'r')
+  except:
+    CurrentFile = open('deck.txt', 'r')
+  
   Count = 1
   while True:
     LineFromFile = CurrentFile.readline()
@@ -112,18 +117,34 @@ def LoadDeck(Deck):
     if AceHighOrLow == True and Deck[Count].Rank == 1:
       Deck[Count].Rank = 14
     Count = Count + 1
+#############
+
+
+
+
+def SaveProgress(NextCard,LastCard,Deck,NoCardsTurnedOver, Score):
+  GameData = [NextCard,LastCard,NoCardsTurnedOver, Score]
+  with open("SaveProgress.dat",mode="w",encoding="utf-8") as myfile:
+    pickle.dump(GameData, myfile)
+    SaveDeck(Deck)
 
 def SaveDeck(Deck):
-  with open('SaveCurrentDeck.txt', mode ='w', encoding = 'utf-8')as myfile:
-    for line in Deck:
-      myfile.write(str(line))
-def SaveCurrentScore(Score):
-  with open ('SaveCurrentScore.txt', mode ='w', encoding = 'utf-8')as myfile:
-      myfile.write(str(Score))
-def SaveCardsTurnedOver(NoOfCardsTurnedOver):
-  with open ('SaveCardsTurnedOver.txt', mode ='w', encoding = 'utf-8')as myfile:
-      myfile.write(str(NoOfCardsTurnedOver))
-  
+   with open("SaveDeck.txt",mode="w",encoding="utf-8") as myfile:
+     for card in Deck:
+       if card != None:
+         myfile.write(str(Card.Suite) + "\n")
+         myfile.write(str(Card.Rank) + "\n")
+
+def LoadProgress():
+  try:
+    with open("SaveProgress.dat",mode="r",encoding="utf-8") as myfile:
+      GameData = pickle.load(myfile)
+  except FileNotFoundError:
+    GameData = None
+
+        
+        
+############
 
 
 def ShuffleDeck(Deck):
@@ -222,17 +243,13 @@ def GetPlayerName():
 
 
 def GetChoiceFromUser():
-  Choice = input('Do you think the next card will be higher than the last card (enter y or n)? ')
+  Choice = input('Do you think the next card will be higher than the last card enter y or n(s to save progress)? ')
   if Choice in ["yes","Y","Yes","y"]:
     Choice = "y"
   elif Choice in ["no","No","N","n"]:
     Choice = "n"
   elif Choice in ['s','S','save','Save']:
-    SaveDeck(Deck)
-    SaveCurrentScore(Score)
-    SaveCardsTurnedOver(NoOfCardsTurnedOver)
-    print("Your Progress has been saved.")
-    main()
+    SaveProgress(NextCard,LastCard,Deck,NoCardsTurnedOver, Score)
     
   return Choice
 
@@ -337,9 +354,26 @@ def LoadScores(RecentScores):
 # in higher if == = false
 def PlayGame(Deck, RecentScores):
   global SameScore
-  LastCard = TCard()
-  NextCard = TCard()
-  GameOver = False
+  GameData = LoadProgress()
+  ContinueGame = 'n'
+  if GameData != None:
+    Valid = False
+    while not Valid:
+      loadmygame = input("There is a saved game - do you want to continue(y or n):")
+      if loadmygame in ['y','Y','yes','Yes','YES']:
+        NextCard = GameData[0]
+        LastCard = GameData[1]
+        NoCardsTurnedOver = GameData[2]
+        Score = GameData[3]
+        Valid = True
+      elif loadmygame in ['n','N','no','No']:
+          LastCard = TCard()
+          NextCard = TCard()
+          GameOver = False
+          Valid = True
+      else:
+        print("That is not a valid option")
+      
   GetCard(LastCard, Deck, 0)
   DisplayCard(LastCard)
   NoOfCardsTurnedOver = 1
